@@ -6,6 +6,7 @@ import Navbar from "../../components/layout/Navbar";
 import Footer from "../../components/layout/Footer";
 import Hero from "../../components/pages/homepage/Hero";
 import WhyTeamsUseIt from "../../components/pages/homepage/WhyTeamsUseIt";
+import AudienceSplit from "@/src/components/pages/homepage/AudienceSplit";
 
 
 export const metadata: Metadata = {
@@ -95,7 +96,7 @@ export default function HomePage() {
             ))}
           </div>
         </section>
-
+<AudienceSplit/>
         <section className="container-custom pb-16">
           <div className="mb-8 max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.3em] text-blue-600">Testimonials</p>
@@ -167,7 +168,7 @@ export default function HomePage() {
           </div>
         </section>
       </main>
-      <Footer />
+     
     </div>
   );
 }
