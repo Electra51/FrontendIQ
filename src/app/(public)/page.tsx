@@ -3,7 +3,6 @@ import Link from "next/link";
 import { faqs, featureCards, featuredAssessments, performers, quizCategories, testimonials } from "../../lib/landingPageData";
 import { topics } from "../../lib/quizData";
 import Navbar from "../../components/layout/Navbar";
-import Footer from "../../components/layout/Footer";
 import Hero from "../../components/pages/homepage/Hero";
 import WhyTeamsUseIt from "../../components/pages/homepage/WhyTeamsUseIt";
 import AudienceSplit from "@/src/components/pages/homepage/AudienceSplit";

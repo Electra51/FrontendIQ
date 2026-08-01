@@ -292,15 +292,21 @@ export default function Navbar() {
               <>
                 <Link
                   href="/login"
-                  className="px-4 py-2 text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md"
+                  className="px-5 py-2.5 bg-linear-to-tr from-[#3452F3] to-[#442a94] text-white rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Log in
                 </Link>
-                <Link
+                {/* <Link
                   href="/register"
                   className="px-5 py-2.5 bg-linear-to-tr from-[#3452F3] to-[#442a94] text-white rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
                   Get Started
+                </Link> */}
+                 <Link
+                  href="/become-recruiter"
+                  className="px-5 py-2.5 border border-gray-300 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                >
+                  Become a Recruiter
                 </Link>
               </>
             )}

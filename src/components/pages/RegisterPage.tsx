@@ -23,7 +23,6 @@ export default function RegisterPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [apiError, setApiError] = useState("");
-  const [selectedRole, setSelectedRole] = useState<"candidate" | "recruiter" | "admin">("candidate");
 
   const {
     register,
@@ -79,7 +78,7 @@ export default function RegisterPage() {
         fullName: data.fullName,
         email: data.email,
         password: data.password,
-        role: selectedRole,
+        role: "candidate",
       });
 
       // Redirect to login with success flag
@@ -163,27 +162,7 @@ export default function RegisterPage() {
    <div className="flex justify-center px-4 md:px-8">
           <div className="w-full max-w-lg">
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-          {/* Role Selection */}
-          <div className="flex gap-2 bg-gray-100 p-1 rounded-lg">
-            <button
-              type="button"
-              onClick={() => setSelectedRole("candidate")}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
-                selectedRole === "candidate" ? "bg-white shadow-sm text-blue-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Candidate
-            </button>
-            <button
-              type="button"
-              onClick={() => setSelectedRole("recruiter")}
-              className={`flex-1 py-2 text-sm font-medium rounded-md transition-all ${
-                selectedRole === "recruiter" ? "bg-white shadow-sm text-blue-600" : "text-gray-500 hover:text-gray-700"
-              }`}
-            >
-              Recruiter
-            </button>
-          </div>
+          {/* No role selection, defaults to candidate */}
 
           <Input
             label="Full Name"
@@ -321,6 +300,15 @@ export default function RegisterPage() {
             className="text-blue-600 hover:text-blue-700 font-semibold"
           >
             Login
+          </Link>
+        </p>
+        <p className="text-center text-sm text-gray-600 mt-2">
+          Want to hire developers?{" "}
+          <Link
+            href="/become-recruiter"
+            className="text-indigo-600 hover:text-indigo-700 font-semibold"
+          >
+            Become a Recruiter
           </Link>
         </p>
         </div></div>
