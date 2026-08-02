@@ -167,16 +167,13 @@ export default function FeaturesPage() {
             <motion.p className="font-mono text-sm font-medium tracking-tight text-indigo-600">
               {"Built-for-hiring-teams"}
             </motion.p>
-            <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-6">
+            <h1 className="text-4xl md:text-[45px] font-bold text-slate-900 tracking-tight mb-6">
               One pipeline, from question
               <br className="hidden sm:block" />
               to hiring decision
             </h1>
-            <p>
-              Create assessments, invite candidates, receive AI-powered reports
-              — all from one dashboard.
-            </p>
-            <p className="text-lg text-slate-600 max-w-xl mr-auto">
+
+            <p className="text-lg text-slate-700 max-w-xl mr-auto">
               FrontendIQ takes an assessment from creation to a scored, analyzed
               report — so your team spends time deciding, not chasing status
               updates.
@@ -482,12 +479,12 @@ export default function FeaturesPage() {
 
       {/* Comparison Section */}
       <section className="py-20 px-4 bg-white">
-        <div className="max-w-6xl mx-auto">
+        <div className="container-custom">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-16"
+            className="text-start mb-16"
           >
             <h2 className="text-4xl font-bold text-gray-900 mb-4">
               Why Choose FrontendIQ?
@@ -556,22 +553,22 @@ export default function FeaturesPage() {
 
       {/* Security — dedicated trust section */}
       <section className="py-20 px-4 bg-slate-900">
-        <div className="max-w-5xl mx-auto">
+        <div className="container-custom grid grid-cols-2 md:grid-cols-[1.05fr_0.95fr] gap-8 items-center">
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-12"
+            className="text-start mb-12"
           >
-            <div className="inline-flex items-center gap-2 px-3 py-1 bg-white/10 text-indigo-300 rounded-full text-xs font-semibold tracking-wide uppercase mb-5">
+            <div className="inline-flex items-center gap-2 py-1 text-indigo-300 rounded-full text-xs font-semibold tracking-wide uppercase mb-2">
               <ShieldCheck className="w-3.5 h-3.5" />
               Security
             </div>
             <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
               Candidate data and assessment links, protected by default
             </h2>
-            <p className="text-slate-400 max-w-xl mx-auto">
+            <p className="text-slate-400 max-w-xl mr-auto">
               No shared links, no unverified accounts, no unscoped access.
             </p>
           </motion.div>

@@ -1,267 +1,460 @@
-// src/app/(marketing)/pricing/page.tsx
 "use client";
 
-import { useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  Building2,
+  Check,
+  ChevronDown,
+  Clock,
+  MessageCircle,
+  ShieldCheck,
+  Users,
+  X,
+  Zap,
+} from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
 
 export default function PricingPage() {
-  const [billingCycle, setBillingCycle] = useState<"monthly" | "yearly">("monthly");
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   const plans = [
     {
-      name: "Free",
-      description: "Perfect for getting started",
-      price: { monthly: 0, yearly: 0 },
+      name: "Starter",
+      description: "Best for small hiring needs",
+      price: 0,
       features: [
         "3 assessments per month",
+        "Up to 10 candidates",
+        "Manual question creation",
         "Basic AI analysis",
-        "Community support",
-        "Public profile",
-        "Basic code editor"
+        "Email invitations",
       ],
       cta: "Get Started Free",
       popular: false,
-      gradient: "from-gray-500 to-gray-700"
     },
     {
       name: "Pro",
-      description: "For serious developers",
-      price: { monthly: 19, yearly: 15 },
+      description: "For growing teams",
+      price: 49,
       features: [
         "Unlimited assessments",
+        "Unlimited candidates",
+        "AI question generator",
         "Advanced AI analysis",
+        "Detailed assessment reports",
         "Priority support",
-        "Custom portfolio",
-        "Advanced code editor",
-        "Performance analytics",
-        "Downloadable certificates",
-        "Interview preparation"
       ],
       cta: "Start Pro Trial",
       popular: true,
-      gradient: "from-blue-600 to-purple-600"
     },
     {
       name: "Enterprise",
-      description: "For teams and companies",
-      price: { monthly: 99, yearly: 79 },
+      description: "For large companies",
+      price: 199,
       features: [
         "Everything in Pro",
         "Team management",
-        "Custom assessments",
+        "Multiple recruiter seats",
+        "Custom company branding",
         "API access",
         "Dedicated account manager",
-        "SSO integration",
-        "Advanced analytics",
-        "Custom branding",
-        "SLA guarantee"
       ],
       cta: "Contact Sales",
       popular: false,
-      gradient: "from-purple-600 to-pink-600"
-    }
+    },
+  ];
+
+  const comparisonRows = [
+    {
+      feature: "Assessments per month",
+      icon: Zap,
+      starter: "3",
+      pro: "Unlimited",
+      enterprise: "Unlimited",
+    },
+    {
+      feature: "Candidates per month",
+      icon: Users,
+      starter: "10",
+      pro: "Unlimited",
+      enterprise: "Unlimited",
+    },
+    {
+      feature: "AI Question Generation",
+      icon: Zap,
+      starter: false,
+      pro: true,
+      enterprise: true,
+    },
+    {
+      feature: "AI Analysis",
+      icon: Zap,
+      starter: "Basic",
+      pro: "Advanced",
+      enterprise: "Advanced",
+    },
+    {
+      feature: "Recruiter Seats",
+      icon: Users,
+      starter: "1",
+      pro: "1",
+      enterprise: "Unlimited",
+    },
+    {
+      feature: "Team Management",
+      icon: Users,
+      starter: false,
+      pro: false,
+      enterprise: true,
+    },
+    {
+      feature: "Custom Branding",
+      icon: Building2,
+      starter: false,
+      pro: false,
+      enterprise: true,
+    },
+    {
+      feature: "API Access",
+      icon: Zap,
+      starter: false,
+      pro: false,
+      enterprise: true,
+    },
+    {
+      feature: "Support",
+      icon: MessageCircle,
+      starter: "Community",
+      pro: "Priority",
+      enterprise: "Dedicated",
+    },
   ];
 
   const faqs = [
     {
-      question: "Can I cancel my subscription anytime?",
-      answer: "Yes, you can cancel your subscription at any time. You'll continue to have access until the end of your billing period."
+      question: "Do candidates need to pay to take assessments?",
+      answer:
+        "No, assessments are 100% free for candidates. Pricing is exclusively for recruiters and companies using the platform to hire.",
     },
     {
-      question: "Do you offer refunds?",
-      answer: "We offer a 14-day money-back guarantee for all paid plans. If you're not satisfied, contact us for a full refund."
+      question: "Can I use my own questions instead of AI?",
+      answer:
+        "Yes. The Starter plan allows manual question creation. You can also mix your own questions with AI-generated ones in the Pro plan.",
     },
     {
-      question: "What payment methods do you accept?",
-      answer: "We accept all major credit cards, PayPal, and bank transfers for Enterprise plans."
+      question: "Can I upgrade or downgrade my plan later?",
+      answer:
+        "Absolutely. You can change your plan at any time from your dashboard. Changes are prorated automatically.",
     },
     {
-      question: "Can I switch plans later?",
-      answer: "Absolutely! You can upgrade or downgrade your plan at any time. Changes will be prorated."
+      question: "How does the 10-candidate limit work in Starter?",
+      answer:
+        "You can invite up to 10 unique candidates per month. Unused invitations do not roll over to the next month.",
     },
     {
-      question: "Is there a student discount?",
-      answer: "Yes! We offer 50% off Pro plans for students. Contact us with your student ID to get started."
-    }
+      question: "What kind of support do I get in the Enterprise plan?",
+      answer:
+        "Enterprise customers get a dedicated account manager, priority SLA, custom onboarding, and direct API integration support.",
+    },
   ];
+
+  const renderCell = (value: boolean | string) => {
+    if (typeof value === "boolean") {
+      return value ? (
+        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-indigo-50">
+          <Check className="w-3.5 h-3.5 text-indigo-600" strokeWidth={2.5} />
+        </span>
+      ) : (
+        <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-slate-100">
+          <X className="w-3.5 h-3.5 text-slate-400" strokeWidth={2.5} />
+        </span>
+      );
+    }
+    return <span className="text-slate-700 text-sm font-medium">{value}</span>;
+  };
 
   return (
     <div className="bg-white">
       {/* Hero */}
-      <section className="py-20 px-4 bg-linear-to-br from-blue-50 via-white to-purple-50">
-        <div className="max-w-4xl mx-auto text-center">
-          <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
-            Simple, Transparent Pricing
-          </h1>
-          <p className="text-xl text-gray-600 mb-8">
-            Choose the plan that fits your needs. Upgrade or downgrade at any time.
+      <section className="container-custom grid gap-14 py-20  lg:grid-cols-[1.05fr_0.95fr] lg:items-center border-b border-slate-100">
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <p className="font-mono text-sm font-medium tracking-tight text-indigo-600 mb-4">
+            {"Simple-transparent-pricing"}
           </p>
+          <h1 className="text-4xl md:text-5xl font-bold text-slate-900 tracking-tight mb-5">
+            Pricing that scales
+            <br className="hidden sm:block" />
+            with your hiring
+          </h1>
+          <p className="text-lg text-slate-600 max-w-lg mb-3">
+            Choose the plan that fits your team. Upgrade or downgrade anytime,
+            no long-term contracts.
+          </p>
+          <p className="text-sm text-slate-500">
+            Candidates always take assessments for free — pricing is for
+            recruiters only.
+          </p>
+        </motion.div>
 
-          {/* Billing Toggle */}
-          <div className="inline-flex items-center bg-white rounded-full p-1 shadow-md border border-gray-200">
-            <button
-              onClick={() => setBillingCycle("monthly")}
-              className={`px-6 py-2 rounded-full font-medium transition ${
-                billingCycle === "monthly"
-                  ? "bg-linear-to-r from-blue-600 to-purple-600 text-white"
-                  : "text-gray-600"
-              }`}
-            >
-              Monthly
-            </button>
-            <button
-              onClick={() => setBillingCycle("yearly")}
-              className={`px-6 py-2 rounded-full font-medium transition ${
-                billingCycle === "yearly"
-                  ? "bg-linear-to-r from-blue-600 to-purple-600 text-white"
-                  : "text-gray-600"
-              }`}
-            >
-              Yearly
-              <span className="ml-2 text-xs bg-green-500 text-white px-2 py-1 rounded-full">Save 20%</span>
-            </button>
+        {/* Quick info panel */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="rounded-2xl border border-slate-200 p-6 space-y-5"
+        >
+          <div className="flex items-start gap-3">
+            <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 shrink-0">
+              <ShieldCheck className="w-4.5 h-4.5 text-indigo-600" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-slate-900">
+                14-day money-back guarantee
+              </p>
+              <p className="text-sm text-slate-500">
+                Not satisfied? Get a full refund, no questions asked.
+              </p>
+            </div>
           </div>
-        </div>
+          <div className="flex items-start gap-3">
+            <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 shrink-0">
+              <Clock className="w-4.5 h-4.5 text-indigo-600" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-slate-900">
+                Cancel anytime
+              </p>
+              <p className="text-sm text-slate-500">
+                No lock-in. Downgrade to Free whenever you like.
+              </p>
+            </div>
+          </div>
+          <div className="flex items-start gap-3">
+            <span className="flex items-center justify-center w-9 h-9 rounded-lg bg-indigo-50 shrink-0">
+              <Zap className="w-4.5 h-4.5 text-indigo-600" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-slate-900">
+                Free plan available
+              </p>
+              <p className="text-sm text-slate-500">
+                Start hiring with 3 assessments per month, no card required.
+              </p>
+            </div>
+          </div>
+        </motion.div>
       </section>
 
       {/* Pricing Cards */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid md:grid-cols-3 gap-8">
-            {plans.map((plan, index) => (
-              <div
-                key={index}
-                className={`relative bg-white rounded-2xl border-2 p-8 transition hover:shadow-2xl ${
-                  plan.popular ? "border-blue-500 shadow-xl scale-105" : "border-gray-200"
+      <section className="container-custom py-20">
+        <div className="grid md:grid-cols-3 gap-6 items-start">
+          {plans.map((plan, index) => (
+            <motion.div
+              key={plan.name}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.4, delay: index * 0.08 }}
+              className={`relative rounded-2xl p-8 transition-all ${
+                plan.popular
+                  ? "border-2 border-indigo-600 shadow-xl shadow-indigo-100 md:-translate-y-2"
+                  : "border border-slate-200 hover:border-slate-300"
+              }`}
+            >
+              {plan.popular && (
+                <span className="absolute -top-3.5 left-1/2 -translate-x-1/2 bg-indigo-600 text-white text-xs font-semibold px-4 py-1.5 rounded-full">
+                  Most Popular
+                </span>
+              )}
+
+              <h3 className="text-lg font-semibold text-slate-900">
+                {plan.name}
+              </h3>
+              <p className="text-sm text-slate-500 mt-1 mb-6">
+                {plan.description}
+              </p>
+
+              <div className="flex items-baseline gap-1 mb-8">
+                <span className="text-4xl font-bold text-slate-900 tracking-tight">
+                  ${plan.price}
+                </span>
+                {plan.price > 0 && (
+                  <span className="text-sm text-slate-500">/month</span>
+                )}
+              </div>
+
+              <Link
+                href={plan.name === "Enterprise" ? "/contact" : "/register"}
+                className={`block w-full py-3 rounded-lg font-medium text-sm text-center transition-colors mb-8 ${
+                  plan.popular
+                    ? "bg-indigo-600 text-white hover:bg-indigo-700"
+                    : "border border-slate-200 text-slate-700 hover:bg-slate-50"
                 }`}
               >
-                {plan.popular && (
-                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                    <span className="bg-linear-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-full text-sm font-semibold">
-                      Most Popular
-                    </span>
-                  </div>
-                )}
+                {plan.cta}
+              </Link>
 
-                <div className="text-center mb-8">
-                  <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                  <p className="text-gray-600 mb-6">{plan.description}</p>
-                  <div className="flex items-baseline justify-center">
-                    <span className="text-5xl font-bold text-gray-900">
-                      ${billingCycle === "monthly" ? plan.price.monthly : plan.price.yearly}
-                    </span>
-                    {plan.price.monthly > 0 && (
-                      <span className="text-gray-600 ml-2">/month</span>
-                    )}
-                  </div>
-                  {billingCycle === "yearly" && plan.price.monthly > 0 && (
-                    <p className="text-sm text-green-600 mt-2">
-                      Billed annually (${plan.price.yearly * 12}/year)
-                    </p>
-                  )}
-                </div>
-
-                <ul className="space-y-4 mb-8">
-                  {plan.features.map((feature, i) => (
-                    <li key={i} className="flex items-start">
-                      <svg
-                        className="w-5 h-5 text-green-500 mr-3 mt-0.5 shrink-0"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M5 13l4 4L19 7"
-                        />
-                      </svg>
-                      <span className="text-gray-700">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Link
-                  href={plan.name === "Enterprise" ? "/contact" : "/register"}
-                  className={`block w-full py-3 rounded-lg font-semibold text-center transition ${
-                    plan.popular
-                      ? "bg-linear-to-r from-blue-600 to-purple-600 text-white hover:shadow-lg"
-                      : "border-2 border-gray-300 text-gray-700 hover:border-blue-500 hover:text-blue-600"
-                  }`}
-                >
-                  {plan.cta}
-                </Link>
-              </div>
-            ))}
-          </div>
+              <ul className="space-y-3">
+                {plan.features.map((feature) => (
+                  <li key={feature} className="flex items-start gap-2.5">
+                    <Check
+                      className="w-4 h-4 text-indigo-600 mt-0.5 shrink-0"
+                      strokeWidth={2.5}
+                    />
+                    <span className="text-sm text-slate-600">{feature}</span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
+          ))}
         </div>
       </section>
 
       {/* Feature Comparison */}
-      <section className="py-20 px-4 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Compare Plans</h2>
-          <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-linear-to-r from-blue-600 to-purple-600 text-white">
-                  <th className="px-6 py-4 text-left font-semibold">Feature</th>
-                  <th className="px-6 py-4 text-center font-semibold">Free</th>
-                  <th className="px-6 py-4 text-center font-semibold">Pro</th>
-                  <th className="px-6 py-4 text-center font-semibold">Enterprise</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {[
-                  { feature: "Assessments per month", free: "3", pro: "Unlimited", enterprise: "Unlimited" },
-                  { feature: "AI Analysis", free: "Basic", pro: "Advanced", enterprise: "Advanced" },
-                  { feature: "Support", free: "Community", pro: "Priority", enterprise: "Dedicated" },
-                  { feature: "Custom Branding", free: "❌", pro: "❌", enterprise: "✅" },
-                  { feature: "API Access", free: "❌", pro: "❌", enterprise: "✅" },
-                  { feature: "Team Management", free: "❌", pro: "❌", enterprise: "✅" }
-                ].map((row, index) => (
-                  <tr key={index} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 font-medium text-gray-900">{row.feature}</td>
-                    <td className="px-6 py-4 text-center text-gray-600">{row.free}</td>
-                    <td className="px-6 py-4 text-center text-gray-600">{row.pro}</td>
-                    <td className="px-6 py-4 text-center text-gray-600">{row.enterprise}</td>
+      <section className="py-20 bg-slate-50 border-y border-slate-100">
+        <div className="container-custom">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-3">
+              Compare plans
+            </h2>
+            <p className="text-slate-600">
+              See exactly what's included in each tier
+            </p>
+          </div>
+
+          <div className="bg-white rounded-2xl border border-slate-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-slate-100">
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Feature
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Starter
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold text-indigo-600 uppercase tracking-wide bg-indigo-50/60">
+                      Pro
+                    </th>
+                    <th className="px-6 py-4 text-center text-xs font-semibold text-slate-500 uppercase tracking-wide">
+                      Enterprise
+                    </th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody className="divide-y divide-slate-100">
+                  {comparisonRows.map((row) => (
+                    <tr
+                      key={row.feature}
+                      className="hover:bg-slate-50/60 transition-colors"
+                    >
+                      <td className="px-6 py-4 text-sm font-medium text-slate-800">
+                        <span className="flex items-center gap-2">
+                          <row.icon className="w-4 h-4 text-slate-400" />
+                          {row.feature}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {renderCell(row.starter)}
+                      </td>
+                      <td className="px-6 py-4 text-center bg-indigo-50/40">
+                        {renderCell(row.pro)}
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        {renderCell(row.enterprise)}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </section>
 
       {/* FAQs */}
-      <section className="py-20 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl font-bold text-gray-900 mb-12 text-center">Frequently Asked Questions</h2>
-          <div className="space-y-6">
-            {faqs.map((faq, index) => (
-              <div key={index} className="bg-gray-50 p-6 rounded-xl border border-gray-200">
-                <h3 className="text-xl font-semibold text-gray-900 mb-3">{faq.question}</h3>
-                <p className="text-gray-600">{faq.answer}</p>
-              </div>
-            ))}
+      <section className="container-custom py-20">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-slate-900 tracking-tight mb-3">
+              Frequently asked questions
+            </h2>
+            <p className="text-slate-600">
+              Everything you need to know about our pricing
+            </p>
+          </div>
+
+          <div className="space-y-3">
+            {faqs.map((faq, index) => {
+              const isOpen = openFaq === index;
+              return (
+                <div
+                  key={faq.question}
+                  className="border border-slate-200 rounded-xl overflow-hidden"
+                >
+                  <button
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    className="w-full flex items-center justify-between gap-4 px-5 py-4 text-left"
+                  >
+                    <span className="text-sm font-medium text-slate-900">
+                      {faq.question}
+                    </span>
+                    <ChevronDown
+                      className={`w-4 h-4 text-slate-400 shrink-0 transition-transform ${
+                        isOpen ? "rotate-180" : ""
+                      }`}
+                    />
+                  </button>
+                  <AnimatePresence initial={false}>
+                    {isOpen && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.2 }}
+                        className="overflow-hidden"
+                      >
+                        <p className="px-5 pb-4 text-sm text-slate-600 leading-relaxed">
+                          {faq.answer}
+                        </p>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA */}
-      <section className="py-20 px-4 bg-linear-to-r from-blue-600 to-purple-600">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="text-4xl font-bold text-white mb-6">Ready to Get Started?</h2>
-          <p className="text-xl text-blue-100 mb-8">
-            Join thousands of developers who are advancing their careers with FrontendIQ
+      <section className="container-custom py-20">
+        <div className="text-center rounded-3xl bg-slate-900 px-8 py-16">
+          <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-4">
+            Ready to streamline your hiring?
+          </h2>
+          <p className="text-slate-300 mb-8 max-w-md mx-auto">
+            Join hiring teams using FrontendIQ to evaluate frontend talent
+            faster.
           </p>
-          <Link
-            href="/register"
-            className="inline-block px-8 py-4 bg-white text-blue-600 rounded-lg font-semibold hover:shadow-xl transition transform hover:scale-105"
-          >
-            Start Free Trial
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center">
+            <Link
+              href="/register"
+              className="px-6 py-3 rounded-lg bg-white text-slate-900 font-medium text-sm hover:bg-slate-100 transition-colors"
+            >
+              Start Free Trial
+            </Link>
+            <Link
+              href="/contact"
+              className="px-6 py-3 rounded-lg border border-slate-700 text-white font-medium text-sm hover:bg-slate-800 transition-colors"
+            >
+              Talk to Sales
+            </Link>
+          </div>
         </div>
       </section>
     </div>
