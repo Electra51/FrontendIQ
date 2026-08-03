@@ -1,27 +1,27 @@
 "use client";
 
+import { useAuth } from "@/src/context/AuthContext";
+import { AnimatePresence, motion } from "framer-motion";
+import {
+  ChevronDown,
+  ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  Trophy,
+  User,
+  X,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useRef, memo, useCallback, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  ChevronDown, 
-  LogOut, 
-  LayoutDashboard, 
-  Menu, 
-  X, 
-  Trophy,
-  ClipboardList,
-  User
-} from "lucide-react";
+import { memo, useCallback, useEffect, useRef, useState } from "react";
 import Swal from "sweetalert2";
-import { useAuth } from "@/src/context/AuthContext";
 
 // 🚀 Performance: Click outside hook (Fixed: using useEffect instead of useState)
 function useClickOutside<T extends HTMLElement>(
   ref: React.RefObject<T | null>,
-  handler: () => void
+  handler: () => void,
 ) {
   useEffect(() => {
     const listener = (event: MouseEvent | TouchEvent) => {
@@ -52,9 +52,7 @@ const UserDropdown = memo(
     const toggleDropdown = useCallback(() => setIsOpen((prev) => !prev), []);
     useClickOutside(dropdownRef, () => setIsOpen(false));
 
-    const avatarUrl =
-      user.avatar ||
-      `/user.png`;
+    const avatarUrl = user.avatar || `/user.png`;
 
     return (
       <div className="relative" ref={dropdownRef}>
@@ -74,7 +72,9 @@ const UserDropdown = memo(
           <span className="hidden md:block text-sm font-medium text-gray-700">
             {user.fullName}
           </span>
-          <ChevronDown className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`} />
+          <ChevronDown
+            className={`w-4 h-4 text-gray-400 transition-transform ${isOpen ? "rotate-180" : ""}`}
+          />
         </button>
 
         <AnimatePresence>
@@ -88,13 +88,19 @@ const UserDropdown = memo(
               className="absolute right-0 mt-2 w-60 origin-top-right rounded-xl border border-gray-100 bg-white p-1 shadow-lg shadow-black/5 ring-1 ring-black/5 z-50"
             >
               <div className="px-4 py-3 border-b border-gray-50">
-                <p className="text-sm font-semibold text-gray-900 truncate">{user.fullName}</p>
+                <p className="text-sm font-semibold text-gray-900 truncate">
+                  {user.fullName}
+                </p>
                 <p className="text-xs text-gray-500 truncate">{user.email}</p>
               </div>
-              
+
               <div className="py-1">
-                 <Link
-                  href={user.role === "admin" ? "/admin/profile" : "/candidate/profile"}
+                <Link
+                  href={
+                    user.role === "admin"
+                      ? "/admin/profile"
+                      : "/candidate/profile"
+                  }
                   className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 hover:text-indigo-600"
                   role="menuitem"
                   onClick={() => setIsOpen(false)}
@@ -102,7 +108,9 @@ const UserDropdown = memo(
                   <User className="h-4 w-4" /> Profile
                 </Link>
                 <Link
-                  href={user.role === "admin" ? "/admin" : "/candidate/dashboard"}
+                  href={
+                    user.role === "admin" ? "/admin" : "/candidate/dashboard"
+                  }
                   className="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-gray-700 transition-colors hover:bg-gray-50 hover:text-indigo-600"
                   role="menuitem"
                   onClick={() => setIsOpen(false)}
@@ -125,7 +133,7 @@ const UserDropdown = memo(
         </AnimatePresence>
       </div>
     );
-  }
+  },
 );
 UserDropdown.displayName = "UserDropdown";
 
@@ -136,7 +144,7 @@ export default function Navbar() {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isAssessmentsOpen, setIsAssessmentsOpen] = useState(false);
-  
+
   const assessmentsRef = useRef<HTMLDivElement>(null);
   useClickOutside(assessmentsRef, () => setIsAssessmentsOpen(false));
 
@@ -189,7 +197,10 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-lg p-1">
+          <Link
+            href="/"
+            className="flex items-center gap-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-lg p-1"
+          >
             <Image
               src="/logo1.png"
               alt="FrontendIQ logo"
@@ -198,55 +209,31 @@ export default function Navbar() {
               className="w-10 h-10 object-contain rounded-lg"
               priority
             />
-            <span className="text-xl font-bold tracking-tight text-gray-900 hidden sm:block">FrontendIQ</span>
+            <span className="text-xl font-bold tracking-tight text-gray-900 hidden sm:block">
+              FrontendIQ
+            </span>
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-3">
-            {/* Assessments Dropdown */}
-            <div className="relative" ref={assessmentsRef}>
-              <button
-                onClick={() => setIsAssessmentsOpen(!isAssessmentsOpen)}
-                className="flex items-center gap-1.5 text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1"
-                aria-expanded={isAssessmentsOpen}
-                aria-haspopup="true"
-              >
-                <span>Assessments</span>
-                <ChevronDown className={`w-4 h-4 transition-transform ${isAssessmentsOpen ? "rotate-180" : ""}`} />
-              </button>
+            <Link
+              href="/how-it-works"
+              className="text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1"
+            >
+              How it Works
+            </Link>
 
-              <AnimatePresence>
-                {isAssessmentsOpen && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
-                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: 10, scale: 0.95 }}
-                    transition={{ duration: 0.15 }}
-                    role="menu"
-                    className="absolute top-full left-0 mt-2 w-64 bg-white rounded-xl shadow-xl shadow-black/5 ring-1 ring-black/5 p-2 z-50"
-                  >
-                    {assessmentCategories.map((category) => (
-                      <Link
-                        key={category.href}
-                        href={category.href}
-                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-indigo-50 hover:text-indigo-600 rounded-lg transition-colors text-gray-700"
-                        role="menuitem"
-                        onClick={() => setIsAssessmentsOpen(false)}
-                      >
-                        <span className="text-lg">{category.icon}</span>
-                        <span className="font-medium text-sm">{category.name}</span>
-                      </Link>
-                    ))}
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-
-            <Link href="/features" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1">
+            <Link
+              href="/features"
+              className="text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1"
+            >
               Features
             </Link>
-            
-            <Link href="/pricing" className="text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1">
+
+            <Link
+              href="/pricing"
+              className="text-gray-600 hover:text-indigo-600 transition-colors font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-md px-2 py-1"
+            >
               Pricing
             </Link>
 
@@ -302,7 +289,7 @@ export default function Navbar() {
                 >
                   Get Started
                 </Link> */}
-                 <Link
+                <Link
                   href="/become-recruiter"
                   className="px-5 py-2.5 border border-gray-300 rounded-full hover:shadow-lg hover:shadow-indigo-500/25 transition-all font-medium text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                 >
@@ -319,7 +306,11 @@ export default function Navbar() {
             aria-label="Toggle menu"
             aria-expanded={isMobileMenuOpen}
           >
-            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            {isMobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
           </button>
         </div>
 
@@ -343,9 +334,11 @@ export default function Navbar() {
                       <ClipboardList className="w-5 h-5 text-indigo-600" />
                       <span>Assessments</span>
                     </div>
-                    <ChevronDown className={`w-4 h-4 transition-transform ${isAssessmentsOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`w-4 h-4 transition-transform ${isAssessmentsOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
-                  
+
                   <AnimatePresence>
                     {isAssessmentsOpen && (
                       <motion.div
@@ -363,7 +356,9 @@ export default function Navbar() {
                               onClick={() => setIsMobileMenuOpen(false)}
                             >
                               <span className="text-lg">{category.icon}</span>
-                              <span className="text-sm font-medium">{category.name}</span>
+                              <span className="text-sm font-medium">
+                                {category.name}
+                              </span>
                             </Link>
                           ))}
                         </div>
@@ -399,11 +394,16 @@ export default function Navbar() {
                 {isAuthenticated && (
                   <div className="space-y-1 px-2">
                     <Link
-                      href={user?.role === "admin" ? "/admin" : "/candidate/dashboard"}
+                      href={
+                        user?.role === "admin"
+                          ? "/admin"
+                          : "/candidate/dashboard"
+                      }
                       className="flex items-center gap-3 text-gray-700 font-medium p-3 rounded-xl hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
-                      <LayoutDashboard className="w-5 h-5 text-indigo-600" /> Dashboard
+                      <LayoutDashboard className="w-5 h-5 text-indigo-600" />{" "}
+                      Dashboard
                     </Link>
                     <Link
                       href="/leaderboard"
@@ -428,11 +428,15 @@ export default function Navbar() {
                           className="rounded-full ring-2 ring-white object-cover"
                         />
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-gray-900 truncate">{user.fullName}</p>
-                          <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                          <p className="text-sm font-bold text-gray-900 truncate">
+                            {user.fullName}
+                          </p>
+                          <p className="text-xs text-gray-500 truncate">
+                            {user.email}
+                          </p>
                         </div>
                       </div>
-                      
+
                       <div className="grid grid-cols-2 gap-2">
                         <Link
                           href="/assessments/start"

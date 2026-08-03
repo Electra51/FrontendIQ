@@ -1,10 +1,9 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   BarChart3,
   Brain,
-  BrainCircuit,
   Briefcase,
   Building2,
   Check,
@@ -12,7 +11,6 @@ import {
   ClipboardList,
   Clock,
   Code2,
-  FileBarChart2,
   FileQuestion,
   GraduationCap,
   KeyRound,
@@ -20,8 +18,6 @@ import {
   Link2,
   Lock,
   Mail,
-  Settings,
-  Shield,
   ShieldCheck,
   Sparkles,
   UserCheck,
@@ -132,68 +128,6 @@ const securityBadges = [
   { icon: Link2, label: "One-time Invitation Links" },
   { icon: Mail, label: "Email Verification" },
 ];
-const features = [
-  {
-    icon: Settings,
-    title: "Assessment Creation",
-    bullets: [
-      "Manual question creation",
-      "AI question generation",
-      "Difficulty selection",
-      "Admin-managed topics",
-    ],
-  },
-  {
-    icon: LayoutDashboard,
-    title: "Recruiter Workflow",
-    bullets: [
-      "Recruiter dashboard",
-      "Candidate invitations",
-      "Assessment management",
-      "Real-time tracking",
-    ],
-  },
-  {
-    icon: Users,
-    title: "Candidate Experience",
-    bullets: [
-      "Secure registration",
-      "Assessment dashboard",
-      "Timer",
-      "Auto submit",
-    ],
-  },
-  {
-    icon: BrainCircuit,
-    title: "AI Evaluation",
-    bullets: [
-      "Topic-wise analysis",
-      "Strengths",
-      "Weaknesses",
-      "Recommendations",
-    ],
-  },
-  {
-    icon: ShieldCheck,
-    title: "Security",
-    bullets: [
-      "JWT Authentication",
-      "Role Based Access",
-      "Email Verification",
-      "One-time Invitation Links",
-    ],
-  },
-  {
-    icon: FileBarChart2,
-    title: "Analytics & Reports",
-    bullets: [
-      "Recruiter Dashboard",
-      "Performance Analytics",
-      "Candidate Reports",
-      "PDF Export",
-    ],
-  },
-];
 
 // Who the platform is built for. Swap for real customer logos once available.
 const usedBy = [
@@ -206,10 +140,9 @@ const usedBy = [
 // NOTE: placeholder numbers for now — replace with real product metrics
 // once you have them, don't ship these to production as-is.
 const stats = [
-  { value: "1000+", label: "AI Generated Questions" },
-
+  { value: "120+", label: "Assessments" },
+  { value: "350+", label: "Candidates" },
   { value: "96%", label: "Completion Rate" },
-  { value: "10+", label: "Supported Technologies" },
 ];
 
 const roadmap = [
@@ -257,7 +190,7 @@ export default function FeaturesPage() {
                 Become a Recruiter
               </button>
               <button className="px-6 py-3 rounded-lg border border-slate-200 text-slate-700 font-medium text-sm hover:bg-slate-50 transition-colors">
-                How It Works
+                View Pricing
               </button>
             </motion.div>
 
@@ -373,58 +306,90 @@ export default function FeaturesPage() {
         </motion.div>
       </section>
 
-      {/* 2. Assessment Features */}
-      <section className="py-24 bg-gray-50/50 border-y border-gray-100">
+      {/* Pipeline — signature section */}
+      <section className="py-20 px-4 bg-white">
         <div className="container-custom">
-          <div className="text-start max-w-2xl mr-auto mb-16">
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900 mb-4">
-              Everything you need to hire better
+          <div className="text-start mb-14">
+            <h2 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight mb-3">
+              How an assessment moves through FrontendIQ
             </h2>
-            <p className="text-gray-600">
-              A complete toolkit designed to make the technical assessment
-              process smooth, secure, and highly insightful.
+            <p className="text-slate-600">
+              Six stages. Select one to see what it does.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {features.map((feature, i) => {
-              const Icon = feature.icon;
-              return (
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-50px" }}
-                  transition={{ duration: 0.5, delay: i * 0.1 }}
-                  key={feature.title}
-                  className="bg-white rounded-3xl p-8 border border-gray-100 shadow-xl shadow-gray-200/40 hover:border-indigo-100 transition-colors group"
-                >
-                  <div className="w-12 h-12 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Icon size={24} />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">
-                    {feature.title}
-                  </h3>
-                  <ul className="space-y-3">
-                    {feature.bullets.map((bullet, idx) => (
-                      <li
-                        key={idx}
-                        className="flex items-start gap-2.5 text-gray-600 text-sm"
-                      >
-                        <CheckCircle2
-                          size={16}
-                          className="text-indigo-400 shrink-0 mt-0.5"
-                        />
-                        <span>{bullet}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </motion.div>
-              );
-            })}
+          {/* Stepper */}
+          <div className="relative mb-12">
+            <div className="hidden md:block absolute top-6 left-0 right-0 h-px bg-slate-200" />
+            <div className="grid grid-cols-2 md:grid-cols-6 gap-y-6 gap-x-2 relative">
+              {pipeline.map((stage, i) => {
+                const isActive = i === activeIndex;
+                return (
+                  <button
+                    key={stage.id}
+                    onClick={() => setActiveIndex(i)}
+                    className="group flex flex-col items-center text-center focus:outline-none"
+                  >
+                    <span
+                      className={`relative z-10 w-12 h-12 rounded-full flex items-center justify-center border text-sm font-semibold transition-colors ${
+                        isActive
+                          ? "bg-indigo-600 border-indigo-600 text-white"
+                          : "bg-white border-slate-200 text-slate-400 group-hover:border-indigo-300 group-hover:text-indigo-600"
+                      }`}
+                    >
+                      {stage.number}
+                    </span>
+                    <span
+                      className={`mt-3 text-sm font-medium transition-colors ${
+                        isActive
+                          ? "text-slate-900"
+                          : "text-slate-500 group-hover:text-slate-700"
+                      }`}
+                    >
+                      {stage.title}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
+          {/* Active stage detail */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={active.id}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25 }}
+              className="rounded-2xl border border-slate-200 bg-slate-50 p-8 md:p-10"
+            >
+              <div className="grid md:grid-cols-2 gap-10 items-start">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-indigo-600 flex items-center justify-center mb-5">
+                    <active.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <p className="text-sm font-semibold text-indigo-600 uppercase tracking-wide mb-2">
+                    Stage {active.number} · {active.summary}
+                  </p>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-3">
+                    {active.title}
+                  </h3>
+                  <p className="text-slate-600">{active.description}</p>
+                </div>
+                <ul className="space-y-3">
+                  {active.features.map((item) => (
+                    <li key={item} className="flex items-start text-slate-700">
+                      <CheckCircle2 className="w-5 h-5 text-indigo-600 mr-3 shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
       </section>
-
       {/* AI Features Highlight */}
       <section className="py-20 px-4 bg-linear-to-br from-blue-600 to-purple-600">
         <div className="container-custom">
@@ -511,165 +476,7 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
-      {/* Platform UIs Section */}
-      <section className="py-24 bg-white overflow-hidden">
-        <div className="container-custom">
-          <div className="text-start max-w-2xl mr-auto mb-20">
-            <h2 className="text-3xl font-bold tracking-tight text-slate-900 mb-4">
-              Powerful tools, beautifully designed
-            </h2>
-            <p className="text-slate-600">
-              Experience a recruiter dashboard and assessment builder that are
-              as intuitive as they are powerful.
-            </p>
-          </div>
 
-          {/* Recruiter Dashboard Mockup */}
-          <div className="flex flex-col lg:flex-row items-center gap-16 mb-24">
-            <div className="flex-1 order-2 lg:order-1">
-              <div className="rounded-2xl border border-slate-200 bg-slate-50 overflow-hidden shadow-2xl shadow-slate-200/50">
-                {/* Mockup Header */}
-                <div className="h-12 border-b border-slate-200 bg-white flex items-center px-4 gap-4">
-                  <div className="flex gap-1.5">
-                    <div className="w-3 h-3 rounded-full bg-slate-200" />
-                    <div className="w-3 h-3 rounded-full bg-slate-200" />
-                    <div className="w-3 h-3 rounded-full bg-slate-200" />
-                  </div>
-                  <div className="w-48 h-6 bg-slate-100 rounded-md" />
-                </div>
-                {/* Mockup Body */}
-                <div className="p-6 flex gap-6">
-                  {/* Sidebar */}
-                  <div className="w-40 space-y-3 hidden sm:block">
-                    <div className="h-8 bg-indigo-100 rounded-lg w-full" />
-                    <div className="h-8 bg-slate-200 rounded-lg w-3/4" />
-                    <div className="h-8 bg-slate-200 rounded-lg w-5/6" />
-                  </div>
-                  {/* Main Content */}
-                  <div className="flex-1 space-y-6">
-                    <div className="flex gap-4">
-                      <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4">
-                        <div className="w-8 h-8 bg-indigo-100 text-indigo-600 rounded-lg flex items-center justify-center mb-2">
-                          <Users size={16} />
-                        </div>
-                        <div className="h-4 bg-slate-200 rounded w-1/2" />
-                      </div>
-                      <div className="flex-1 h-24 bg-white border border-slate-200 rounded-xl p-4">
-                        <div className="w-8 h-8 bg-emerald-100 text-emerald-600 rounded-lg flex items-center justify-center mb-2">
-                          <FileBarChart2 size={16} />
-                        </div>
-                        <div className="h-4 bg-slate-200 rounded w-1/2" />
-                      </div>
-                    </div>
-                    <div className="h-40 bg-white border border-slate-200 rounded-xl p-4 space-y-3">
-                      <div className="h-5 bg-slate-100 rounded w-1/3 mb-4" />
-                      <div className="flex justify-between items-center">
-                        <div className="h-4 bg-slate-100 rounded w-1/4" />
-                        <div className="h-6 w-16 bg-emerald-100 rounded-full" />
-                      </div>
-                      <div className="flex justify-between items-center">
-                        <div className="h-4 bg-slate-100 rounded w-1/4" />
-                        <div className="h-6 w-16 bg-amber-100 rounded-full" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex-1 order-1 lg:order-2">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-50 text-indigo-700 text-xs font-semibold mb-4">
-                <LayoutDashboard size={14} /> Centralized Hub
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-4">
-                Recruiter Dashboard
-              </h3>
-              <p className="text-lg text-slate-600 leading-relaxed mb-6">
-                Manage all your technical assessments, track candidate progress
-                in real-time, and review AI-generated insights from one unified
-                dashboard.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-indigo-600 w-5 h-5" />{" "}
-                  At-a-glance performance metrics
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-indigo-600 w-5 h-5" /> Quick
-                  access to candidate reports
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-indigo-600 w-5 h-5" /> Seamless
-                  invitation management
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          {/* Assessment Builder Mockup */}
-          <div className="flex flex-col lg:flex-row items-center gap-16">
-            <div className="flex-1">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-50 text-purple-700 text-xs font-semibold mb-4">
-                <Settings size={14} /> Powerful Editor
-              </div>
-              <h3 className="text-3xl font-bold text-slate-900 mb-4">
-                Assessment Builder
-              </h3>
-              <p className="text-lg text-slate-600 leading-relaxed mb-6">
-                Build comprehensive frontend tests with ease. Combine manual
-                questions from your bank with unique, AI-generated challenges
-                tailored to your exact needs.
-              </p>
-              <ul className="space-y-3">
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-purple-600 w-5 h-5" />{" "}
-                  Integrated AI Question Generator
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-purple-600 w-5 h-5" />{" "}
-                  Fine-grained difficulty controls
-                </li>
-                <li className="flex items-center gap-3 text-slate-700">
-                  <CheckCircle2 className="text-purple-600 w-5 h-5" />{" "}
-                  Drag-and-drop question ordering
-                </li>
-              </ul>
-            </div>
-            <div className="flex-1">
-              <div className="rounded-2xl border border-slate-200 bg-white overflow-hidden shadow-2xl shadow-slate-200/50">
-                <div className="h-12 border-b border-slate-200 bg-slate-50 flex items-center px-4 justify-between">
-                  <div className="h-5 bg-slate-200 rounded w-1/3" />
-                  <div className="h-8 w-24 bg-indigo-600 rounded-lg" />
-                </div>
-                <div className="p-6">
-                  <div className="flex gap-4 mb-6">
-                    <div className="h-10 bg-slate-50 border border-slate-200 rounded-lg flex-1" />
-                    <div className="h-10 bg-slate-50 border border-slate-200 rounded-lg w-32" />
-                  </div>
-                  <div className="space-y-4">
-                    <div className="p-4 border border-slate-200 rounded-xl relative">
-                      <div className="absolute top-4 right-4 flex gap-2">
-                        <div className="w-6 h-6 bg-slate-100 rounded" />
-                        <div className="w-6 h-6 bg-slate-100 rounded" />
-                      </div>
-                      <div className="h-4 bg-slate-200 rounded w-3/4 mb-3" />
-                      <div className="h-3 bg-slate-100 rounded w-1/2 mb-2" />
-                      <div className="h-3 bg-slate-100 rounded w-2/3" />
-                    </div>
-                    <div className="p-4 border border-purple-200 bg-purple-50 rounded-xl relative">
-                      <div className="flex items-center gap-2 mb-3">
-                        <BrainCircuit className="text-purple-600 w-4 h-4" />
-                        <div className="h-4 bg-purple-200 rounded w-1/3" />
-                      </div>
-                      <div className="h-3 bg-purple-100 rounded w-3/4 mb-2" />
-                      <div className="h-3 bg-purple-100 rounded w-1/2" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       {/* Comparison Section */}
       <section className="py-20 px-4 bg-white">
         <div className="container-custom">
@@ -743,107 +550,41 @@ export default function FeaturesPage() {
           </div>
         </div>
       </section>
-      {/* 4. Security Section */}
-      <section className="py-24 bg-gray-950 text-white">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-                Enterprise-grade security built in
-              </h2>
-              <p className="text-gray-400 text-lg mb-8 leading-relaxed">
-                Your hiring process involves sensitive data. FrontendIQ is built
-                with a security-first architecture to ensure candidate privacy
-                and platform integrity.
-              </p>
 
-              <div className="grid sm:grid-cols-2 gap-6">
-                {[
-                  {
-                    title: "JWT Authentication",
-                    desc: "Stateless, secure sessions",
-                  },
-                  {
-                    title: "Role Based Access",
-                    desc: "Strict Admin & Recruiter separation",
-                  },
-                  {
-                    title: "Email Verification",
-                    desc: "Mandatory for all recruiter accounts",
-                  },
-                  {
-                    title: "Secure Links",
-                    desc: "One-time, expiring candidate invites",
-                  },
-                ].map((item, i) => (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: i * 0.1 }}
-                    key={item.title}
-                    className="flex gap-4"
-                  >
-                    <div className="mt-1">
-                      <div className="w-8 h-8 rounded-full bg-gray-800 flex items-center justify-center text-emerald-400">
-                        <Shield size={14} />
-                      </div>
-                    </div>
-                    <div>
-                      <h4 className="font-semibold text-gray-100">
-                        {item.title}
-                      </h4>
-                      <p className="text-sm text-gray-500 mt-1">{item.desc}</p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
+      {/* Security — dedicated trust section */}
+      <section className="py-20 px-4 bg-slate-900">
+        <div className="container-custom grid grid-cols-2 md:grid-cols-[1.05fr_0.95fr] gap-8 items-center">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="text-start mb-12"
+          >
+            <div className="inline-flex items-center gap-2 py-1 text-indigo-300 rounded-full text-xs font-semibold tracking-wide uppercase mb-2">
+              <ShieldCheck className="w-3.5 h-3.5" />
+              Security
             </div>
+            <h2 className="text-3xl md:text-4xl font-bold text-white tracking-tight mb-3">
+              Candidate data and assessment links, protected by default
+            </h2>
+            <p className="text-slate-400 max-w-xl mr-auto">
+              No shared links, no unverified accounts, no unscoped access.
+            </p>
+          </motion.div>
 
-            <div className="relative">
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="absolute inset-0 bg-linear-to-tr from-emerald-900/40 to-indigo-900/40 rounded-[2.5rem] transform rotate-3"
-              />
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6, delay: 0.1 }}
-                className="relative bg-gray-900 border border-gray-800 rounded-[2.5rem] p-8 md:p-12 shadow-2xl"
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {securityBadges.map((badge) => (
+              <div
+                key={badge.label}
+                className="flex flex-col items-center text-center gap-3 bg-white/5 border border-white/10 rounded-xl p-6"
               >
-                <div className="flex items-center justify-center mb-8">
-                  <div className="w-20 h-20 rounded-2xl bg-gray-800 border border-gray-700 flex items-center justify-center relative">
-                    <Lock size={32} className="text-emerald-400" />
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center backdrop-blur-sm border border-emerald-500/30">
-                      <Check size={14} className="text-emerald-400" />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-gray-800/50 border border-gray-700/50">
-                    <span className="text-sm text-gray-400">
-                      Public Registration
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-red-500/10 text-red-400 text-xs font-semibold border border-red-500/20">
-                      <X size={12} /> Disabled
-                    </span>
-                  </div>
-                  <div className="flex items-center justify-between p-4 rounded-xl bg-gray-800/50 border border-gray-700/50">
-                    <span className="text-sm text-gray-400">
-                      Invite-Only Access
-                    </span>
-                    <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-500/10 text-emerald-400 text-xs font-semibold border border-emerald-500/20">
-                      <Check size={12} /> Enforced
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
+                <badge.icon className="w-6 h-6 text-indigo-400" />
+                <span className="text-sm text-slate-200 font-medium">
+                  {badge.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </section>
